@@ -25,7 +25,9 @@ const DelPres = ({ setLink, names, data, setData }) => {
     }
     try {
       let pres = { key, name };
-      await axios.delete("http://localhost:3001/deletepres", { data: pres });
+      await axios.delete("https://potp.herokuapp.com/deletepres", {
+        data: pres,
+      });
       let tempData = data.slice();
       let updatedDetails = tempData.filter((el) => el.name !== pres.name);
       setData(updatedDetails);
