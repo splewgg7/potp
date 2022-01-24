@@ -4,7 +4,6 @@
     base = "/"
 
 
-
 [[redirects]]
     from = "/*"
     to = "/index.html"
