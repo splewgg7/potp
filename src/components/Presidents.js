@@ -27,7 +27,7 @@ const Presidents = () => {
   const selectedRef = useRef(null);
 
   const getPresArray = useCallback(async () => {
-    await axios.get("https://potp.herokuapp.com//getpres").then((res) => {
+    await axios.get("https://potp.herokuapp.com/getpres").then((res) => {
       setData(res.data);
     });
   }, [setData]);
