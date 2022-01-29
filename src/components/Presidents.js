@@ -31,11 +31,10 @@ const Presidents = () => {
     let result = await axios.get("https://potp.herokuapp.com/getpres");
     setData(result.data);
   }, []);
-  const memoData = useMemo(() => getPresArray, [getPresArray, data]);
 
   useEffect(() => {
     getPresArray();
-  }, [getPresArray, memoData]);
+  }, [getPresArray]);
 
   const getNames = useCallback(() => {
     setNames(data.map((pres) => pres.name));
