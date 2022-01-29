@@ -9,6 +9,7 @@ import React, {
   useState,
 } from "react";
 import { BsArrowReturnLeft } from "react-icons/bs";
+import Card from "./Card";
 import Hero from "./Hero";
 import PostPres from "./PostPres";
 
@@ -27,16 +28,14 @@ const Presidents = () => {
   const selectedRef = useRef(null);
 
   const getPresArray = useCallback(async () => {
-    await axios.get("https://potp.herokuapp.com/getpres").then((res) => {
-      setData(res.data);
-    });
+    let result = await axios.get("https://potp.herokuapp.com/getpres");
+    setData(result.data);
   }, []);
-
-  useMemo(() => data, [data]);
+  const memoData = useMemo(() => getPresArray, [getPresArray, data]);
 
   useEffect(() => {
     getPresArray();
-  }, [getPresArray, data]);
+  }, [getPresArray, memoData]);
 
   const getNames = useCallback(() => {
     setNames(data.map((pres) => pres.name));
@@ -106,22 +105,14 @@ const Presidents = () => {
       <div className="parent-card" ref={presidentsRef}>
         {data &&
           data.map((pres, idx) => (
-            <div
+            <Card
               key={idx}
-              className="card-press"
-              onClick={() => {
-                setSelected(pres);
-                timeline.play();
-                setTimeout(() => {
-                  selectedPresRef.current.scrollIntoView({
-                    behavior: "smooth",
-                  });
-                }, 250);
-              }}
-            >
-              <img src={pres.image} alt="president" />
-              <h1>{pres.name}</h1>
-            </div>
+              idx={idx}
+              info={pres}
+              setSelected={setSelected}
+              timeline={timeline}
+              selectedPresRef={selectedPresRef}
+            />
           ))}
       </div>
       {selected && (
@@ -142,7 +133,9 @@ const Presidents = () => {
         </>
       )}
       <div>
-        {data && <PostPres names={names} data={data} setData={setData} />}
+        {data !== [] && (
+          <PostPres names={names} data={data} setData={setData} />
+        )}
       </div>
     </div>
   );
