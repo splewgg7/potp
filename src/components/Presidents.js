@@ -29,6 +29,7 @@ const Presidents = () => {
   const [presCache, setPresCache] = useState(
     JSON.parse(localStorage.getItem("presArr"))
   );
+  console.log(presCache);
 
   const getPresArray = useCallback(async () => {
     let result = await axios.get("https://potp.herokuapp.com/getpres");
@@ -40,8 +41,9 @@ const Presidents = () => {
   }, [getPresArray]);
 
   useEffect(() => {
-    if (!presCache || presCache !== data) {
+    if (presCache !== data) {
       localStorage.setItem("presArr", JSON.stringify(data));
+      setPresCache(data);
     }
   }, [data, presCache]);
 
@@ -111,17 +113,16 @@ const Presidents = () => {
     <div>
       <Hero />
       <div className="parent-card" ref={presidentsRef}>
-        {presCache &&
-          presCache.map((pres, idx) => (
-            <Card
-              key={idx}
-              idx={idx}
-              info={pres}
-              setSelected={setSelected}
-              timeline={timeline}
-              selectedPresRef={selectedPresRef}
-            />
-          ))}
+        {presCache?.map((pres, idx) => (
+          <Card
+            key={idx}
+            idx={idx}
+            info={pres}
+            setSelected={setSelected}
+            timeline={timeline}
+            selectedPresRef={selectedPresRef}
+          />
+        ))}
       </div>
       {selected && (
         <>
