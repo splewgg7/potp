@@ -30,11 +30,13 @@ const Presidents = () => {
     await axios.get("https://potp.herokuapp.com/getpres").then((res) => {
       setData(res.data);
     });
-  }, [setData]);
+  }, []);
+
+  useMemo(() => data, [data]);
 
   useEffect(() => {
     getPresArray();
-  }, [getPresArray]);
+  }, [getPresArray, data]);
 
   const getNames = useCallback(() => {
     setNames(data.map((pres) => pres.name));
@@ -140,7 +142,7 @@ const Presidents = () => {
         </>
       )}
       <div>
-        <PostPres names={names} data={data} setData={setData} />
+        {data && <PostPres names={names} data={data} setData={setData} />}
       </div>
     </div>
   );
